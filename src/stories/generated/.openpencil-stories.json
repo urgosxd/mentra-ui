@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "files": {
+    "openpencil/openpencil-pdf-biblioteca-de-componentes/fonts/inter-600-normal.woff2": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "openpencil/openpencil-pdf-biblioteca-de-componentes/fonts.css": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "openpencil/openpencil-pdf-biblioteca-de-componentes/tokens.css": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "Button.tsx": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "Button.stories.ts": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "Badge.tsx": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "Badge.stories.ts": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    }
+  }
+}

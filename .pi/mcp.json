@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "storybook": {
+      "url": "http://localhost:6006/mcp",
+      "exposure": "deferred",
+      "description": "Storybook: list components and their props, read usage docs/guidelines, generate and run stories and tests in the local dev server."
+    }
+  }
+}

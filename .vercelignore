@@ -1,0 +1,10 @@
+# Storybook is built by Vercel, so build output and local deps must not be uploaded.
+node_modules
+storybook-static
+dist
+coverage
+*.log
+
+# Local-only agent context.
+.agents
+.pi

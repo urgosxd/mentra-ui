@@ -1,8 +1,14 @@
 import type { Preview } from '@storybook/react-vite'
+import '../src/icons'
 import '../src/styles/design-system.css'
 
 const preview: Preview = {
   parameters: {
+    // Design-system components read better centered than in Storybook's default
+    // top-left "padded" layout. Use layout: 'padded' or 'fullscreen' per story
+    // when a component needs to hug the edges (tables, full-bleed sections).
+    layout: 'centered',
+
     controls: {
       matchers: {
        color: /(background|color)$/i,

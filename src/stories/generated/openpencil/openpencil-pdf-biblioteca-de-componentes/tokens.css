@@ -168,6 +168,7 @@
   --type-weight-body: var(--type-weight-regular);
   --type-weight-heading: var(--type-weight-semibold);
   --border-width-default: var(--border-width-hairline);
+  --border-width-focus-2: var(--border-width-focus);
   --component-button-height-md: var(--size-control-md-2);
   --component-button-padding-x: var(--spacing-inset-md);
   --component-button-radius: var(--radius-control);

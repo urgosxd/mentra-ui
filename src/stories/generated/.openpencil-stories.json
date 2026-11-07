@@ -28,6 +28,14 @@
     "Badge.stories.ts": {
       "source": "../../../../../../openpencil/pdf.fig",
       "page": "Biblioteca de componentes"
+    },
+    "DateRangePicker.tsx": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
+    },
+    "DateRangePicker.stories.ts": {
+      "source": "../../../../../../openpencil/pdf.fig",
+      "page": "Biblioteca de componentes"
     }
   }
 }

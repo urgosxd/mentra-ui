@@ -48,6 +48,20 @@ Rules for `src/stories/ui/`:
 - Import test utilities from `storybook/test` (not `@storybook/test`, which is not installed).
   `within(el)` returns only bound queries, no `.container`: use `el.querySelectorAll(...)` on
   `canvasElement` and filter by `offsetParent !== null`.
+- **Iconify renders an empty `<span>` placeholder per icon** until it fetches the icon data from
+  `api.iconify.design` at runtime. Counting `span`s naively counts those placeholders as labels and
+  the count differs between a cold and a warm icon cache. Filter on non-empty text (see
+  `src/stories/ui/DateRangePicker.stories.tsx`) and assert `button.textContent` for the control's
+  total text.
+- The generated export depends on `@iconify/react` and names icons as strings (`lucide:calendar`),
+  so the icon data has to be registered, not imported per icon. `src/icons.ts` does it with
+  `addCollection(lucideIcons)` from `@iconify-json/lucide` and is imported by
+  `.storybook/preview.tsx`. Without it, icons are fetched from `api.iconify.design` at render time.
+  The app entry (`src/main.tsx`) deliberately does **not** import it: the full lucide collection is
+  ~650 kB, so a curated `addIcon()` subset is the way in for production.
+  `tsconfig.app.json` needs `resolveJsonModule: true` for the JSON collection import.
+- Prove the registration still works rather than assuming it: `Default` asserts three real `<svg>`
+  nodes, which is 0 when the collection is missing (placeholders only).
 - Never assert on class names.
 - `a11y.test` is `'todo'` in `.storybook/preview.tsx`: violations are visible in the test UI but
   do not fail the run. Raise it to `'error'` only on explicit request.

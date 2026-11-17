@@ -91,7 +91,7 @@ export const Default: Story = {
 export const Participacion: Story = {
   play: async ({ canvasElement }) => {
     const { cells } = getRow(canvasElement);
-    const { track, fill } = getBar(cells);
+    const { track, fill } = getBar(cells as HTMLElement[]);
 
     expect(track.getAttribute('role')).toBe('progressbar');
     expect(track.getAttribute('aria-valuenow')).toBe('14.2');
@@ -177,7 +177,7 @@ export const DarkTheme: Story = {
     expect(getComputedStyle(cells[4]).color).toBe(tokenValue('--color-text-secondary'));
     expect(getComputedStyle(cells[4]).color).toBe(tokenValue('--color-slate-400'));
 
-    const { track, fill } = getBar(cells);
+    const { track, fill } = getBar(cells as HTMLElement[]);
     expect(getComputedStyle(track).backgroundColor).toBe(
       tokenValue('--color-chart-track', 'background-color')
     );

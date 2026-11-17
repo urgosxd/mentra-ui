@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, waitFor } from 'storybook/test';
 import { FilterChip } from '../generated/FilterChip';
 import {
   TRANSPARENT,
@@ -89,7 +89,11 @@ export const Focus: Story = {
     // The chip keeps its hairline border and gains a 2px outline on focus, so the
     // outline (not the border) is what has to move.
     expect(getComputedStyle(chip).borderTopWidth).toBe('1px');
-    const restOutline = getComputedStyle(chip).outlineWidth;
+    // Snapshot the rest state as strings: `getComputedStyle` returns a live
+    // declaration, so reading it after focusing would report the focused values.
+    const rest = getComputedStyle(chip);
+    const restOutline = rest.outlineWidth;
+    const restOutlineColor = rest.outlineColor;
 
     await userEvent.tab();
     expect(document.activeElement).toBe(chip);
@@ -97,8 +101,14 @@ export const Focus: Story = {
     const focused = getComputedStyle(chip);
     expect(focused.outlineWidth).not.toBe(restOutline);
     expect(focused.outlineWidth).toBe('2px');
-    expect(focused.outlineColor).toBe(tokenValue('--color-border-focus'));
     expect(focused.borderTopWidth).toBe('1px');
+
+    // `transition-colors` animates `outline-color`, so the frame right after focus
+    // still reads the colour it started from. Wait for the transition to settle and
+    // only then compare against the token the utility declares.
+    const ringColor = tokenValue('--color-border-focus');
+    expect(ringColor).not.toBe(restOutlineColor);
+    await waitFor(() => expect(getComputedStyle(chip).outlineColor).toBe(ringColor));
   }
 };
 

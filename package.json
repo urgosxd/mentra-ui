@@ -19,7 +19,11 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.151",
     "@iconify/react": "^6.0.4",
+    "@storybook/mcp": "^10.6.7",
+    "date-fns": "^4.4.0",
+    "radix-ui": "^1.8.1",
     "react": "^19.3.1",
+    "react-day-picker": "^9.14.0",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {

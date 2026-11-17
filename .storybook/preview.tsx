@@ -1,8 +1,10 @@
 import type { Preview } from '@storybook/react-vite'
 import '../src/icons'
 import '../src/styles/design-system.css'
+import { withSemanticTheme } from './decorators'
 
 const preview: Preview = {
+  decorators: [withSemanticTheme],
   parameters: {
     // Design-system components read better centered than in Storybook's default
     // top-left "padded" layout. Use layout: 'padded' or 'fullscreen' per story

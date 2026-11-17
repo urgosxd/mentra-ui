@@ -95,6 +95,19 @@
   --type-weight-black: 800px;
   --border-width-hairline: 1px;
   --border-width-focus: 2px;
+  --color-blue-100: #DDE9F7;
+  --color-blue-700: #1F4F8A;
+  --color-indigo-100: #E2E2F7;
+  --color-indigo-700: #3B3F8A;
+  --color-orange-50: #FCE9D6;
+  --color-orange-700: #7A3F08;
+  --radius-150: 6px;
+  --size-badge-sm: 24px;
+  --color-blue-400: #4F86C6;
+  --color-violet-400: #7B5FC9;
+  --color-brown-600: #6B4A22;
+  --color-neutral-150: #EEEBE3;
+  --color-slate-300: #8A928C;
   --color-bg-canvas: var(--color-neutral-50);
   --color-bg-surface: var(--color-neutral-0);
   --color-bg-raised: var(--color-neutral-0);
@@ -169,6 +182,37 @@
   --type-weight-heading: var(--type-weight-semibold);
   --border-width-default: var(--border-width-hairline);
   --border-width-focus-2: var(--border-width-focus);
+  --color-shift-morning-bg: var(--color-blue-100);
+  --color-shift-morning-text: var(--color-blue-700);
+  --color-shift-intermediate-bg: var(--color-green-50);
+  --color-shift-intermediate-text: var(--color-green-600);
+  --color-shift-afternoon-bg: var(--color-amber-50);
+  --color-shift-afternoon-text: var(--color-amber-700);
+  --color-shift-night-bg: var(--color-indigo-100);
+  --color-shift-night-text: var(--color-indigo-700);
+  --color-shift-split-am-bg: var(--color-red-50);
+  --color-shift-split-am-text: var(--color-red-600);
+  --color-shift-split-pm-bg: var(--color-orange-50);
+  --color-shift-split-pm-text: var(--color-orange-700);
+  --color-shift-rest-bg: var(--color-neutral-100);
+  --color-shift-rest-text: var(--color-neutral-500);
+  --color-shift-free-bg: var(--color-neutral-50);
+  --color-shift-free-text: var(--color-neutral-400);
+  --color-chart-track: var(--color-neutral-100);
+  --color-chart-grid: var(--color-neutral-200);
+  --radius-chip: var(--radius-150);
+  --size-badge-sm-2: var(--size-badge-sm);
+  --size-row-sm-2: var(--size-row-sm);
+  --color-chart-series-1: var(--color-blue-400);
+  --color-chart-series-2: var(--color-amber-300);
+  --color-chart-series-3: var(--color-violet-400);
+  --color-chart-series-4: var(--color-red-600);
+  --color-chart-series-5: var(--color-green-600);
+  --color-chart-series-6: var(--color-brown-600);
+  --color-chart-series-7: var(--color-neutral-500);
+  --color-border-divider: var(--color-neutral-150);
+  --color-icon-muted: var(--color-slate-300);
+  --color-icon-info: var(--color-blue-700);
   --component-button-height-md: var(--size-control-md-2);
   --component-button-padding-x: var(--spacing-inset-md);
   --component-button-radius: var(--radius-control);
@@ -191,6 +235,12 @@
   --color-component-card-bg: var(--color-bg-surface);
   --color-component-card-border: var(--color-border-subtle);
   --color-component-table-header-bg: var(--color-bg-canvas);
+  --component-shift-chip-height: var(--size-badge-sm-2);
+  --component-shift-chip-radius: var(--radius-chip);
+  --component-shift-chip-padding-x: var(--spacing-stack-md);
+  --component-table-row-height-sm: var(--size-row-sm-2);
+  --color-component-chart-track: var(--color-chart-track);
+  --color-component-chart-grid: var(--color-chart-grid);
 }
 
 /* Semantic: Dark */
@@ -233,6 +283,27 @@
   --color-data-1: var(--color-brand-300);
   --color-data-3: var(--color-brand-700);
   --color-accent-text: var(--color-accent-500);
+  --color-shift-morning-bg: var(--color-blue-950);
+  --color-shift-morning-text: var(--color-slate-200);
+  --color-shift-intermediate-bg: var(--color-green-950);
+  --color-shift-intermediate-text: var(--color-green-300);
+  --color-shift-afternoon-bg: var(--color-amber-950);
+  --color-shift-afternoon-text: var(--color-amber-300);
+  --color-shift-night-bg: var(--color-slate-700);
+  --color-shift-night-text: var(--color-slate-200);
+  --color-shift-split-am-bg: var(--color-red-950);
+  --color-shift-split-am-text: var(--color-red-300);
+  --color-shift-split-pm-bg: var(--color-amber-950);
+  --color-shift-split-pm-text: var(--color-amber-300);
+  --color-shift-rest-bg: var(--color-slate-800);
+  --color-shift-rest-text: var(--color-slate-400);
+  --color-shift-free-bg: var(--color-slate-900);
+  --color-shift-free-text: var(--color-slate-400);
+  --color-chart-track: var(--color-slate-700);
+  --color-chart-grid: var(--color-slate-700);
+  --color-border-divider: var(--color-slate-800);
+  --color-icon-muted: var(--color-slate-400);
+  --color-icon-info: var(--color-blue-400);
   --color-component-button-bg: var(--color-action-primary);
   --color-component-button-text: var(--color-text-inverse);
   --color-component-button-bg-hover: var(--color-action-primary-hover);
@@ -241,4 +312,7 @@
   --color-component-card-bg: var(--color-bg-surface);
   --color-component-card-border: var(--color-border-subtle);
   --color-component-table-header-bg: var(--color-bg-canvas);
+  --color-component-chart-track: var(--color-chart-track);
+  --color-component-chart-grid: var(--color-chart-grid);
 }
+

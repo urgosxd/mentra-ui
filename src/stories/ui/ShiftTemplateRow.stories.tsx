@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { ShiftTemplateRow } from '../generated/ShiftTemplateRow';
 import { SHIFT_TEMPLATE_TONES, type ShiftTemplateTone } from '../generated/app-data';
+import {
+  TRANSPARENT,
+  declaredStateValues,
+  resolveDeclaration,
+  tokenValue
+} from './styleProbe';
 
 const meta = {
   title: 'UI/ShiftTemplateRow',
@@ -92,9 +98,50 @@ export const AllTones: Story = {
   }
 };
 
+// The pencil action is the row's only interactive state: a `:hover` wash plus the
+// label colour warming to text/primary. See `declaredStateStyle` for why the
+// hovered pseudo-class cannot be computed here.
+export const HoverEdit: Story = {
+  args: { onEdit: fn() },
+  play: async ({ canvasElement, userEvent }) => {
+    const edit = canvasElement.querySelector('button') as HTMLButtonElement;
+    expect(getComputedStyle(edit).backgroundColor).toBe(TRANSPARENT);
+
+    await userEvent.hover(edit);
+
+    const wash = declaredStateValues(edit, 'background-color')
+      .filter((value) => value.includes('--color-bg-sunken'))
+      .at(-1);
+    if (wash === undefined) throw new Error('the edit action declares no bg/sunken :hover background');
+    expect(resolveDeclaration('background-color', wash)).not.toBe(TRANSPARENT);
+
+    expect(
+      declaredStateValues(edit, 'color').map((value) => resolveDeclaration('color', value))
+    ).toContain(tokenValue('--color-text-primary'));
+  }
+};
+
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
     await expectTemplate(canvasElement, 'Mañana');
+
+    // Row surface (slate-900) and the morning swatch (blue-950) both come from the
+    // dark block; a frozen light swatch would read as "no tone" against it.
+    const row = canvasElement.querySelector('[data-tono]') as HTMLElement;
+    expect(getComputedStyle(row).backgroundColor).toBe(
+      tokenValue('--color-bg-surface', 'background-color')
+    );
+    expect(tokenValue('--color-bg-surface', 'background-color')).toBe(
+      tokenValue('--color-slate-900', 'background-color')
+    );
+    const swatch = row.querySelector('[data-swatch]') as HTMLElement;
+    expect(getComputedStyle(swatch).backgroundColor).toBe(
+      tokenValue('--color-shift-morning-bg', 'background-color')
+    );
+    expect(tokenValue('--color-shift-morning-bg', 'background-color')).toBe(
+      tokenValue('--color-blue-950', 'background-color')
+    );
   }
 };

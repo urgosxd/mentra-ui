@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Avatar } from '../generated/Avatar';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/Avatar',
@@ -43,9 +44,46 @@ export const Labelled: Story = {
   }
 };
 
+export const AllStates: Story = {
+  render: () => (
+    <div className="flex items-center gap-2 bg-(--color-bg-canvas) p-4">
+      <Avatar initials="LC" />
+      <Avatar initials="AA" label="Ada Lovelace" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const avatars = Array.from(canvasElement.querySelectorAll('[data-avatar]'));
+    expect(avatars).toHaveLength(2);
+    expect(avatars.map((avatar) => avatar.textContent)).toEqual(['LC', 'AA']);
+
+    // The labelled avatar is the only one exposed to assistive tech; the
+    // decorative one stays hidden so the adjacent user name is not duplicated.
+    expect(avatars.map((avatar) => avatar.getAttribute('aria-hidden'))).toEqual([
+      'true',
+      null
+    ]);
+    expect(avatars.map((avatar) => avatar.getAttribute('role'))).toEqual([null, 'img']);
+  }
+};
+
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
-    expect(getAvatar(canvasElement).textContent).toBe('LC');
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
+
+    const avatar = getAvatar(canvasElement);
+    expect(avatar.textContent).toBe('LC');
+
+    // `bg/brand` moves from brand-800 to slate-800 in the dark block while the
+    // circle radius does not: both are asserted so a lost theme hook fails here.
+    expect(getComputedStyle(avatar).backgroundColor).toBe(
+      tokenValue('--color-bg-brand', 'background-color')
+    );
+    expect(tokenValue('--color-bg-brand', 'background-color')).toBe(
+      tokenValue('--color-slate-800', 'background-color')
+    );
+    const initials = avatar.querySelector('span') as HTMLElement;
+    expect(getComputedStyle(initials).color).toBe(tokenValue('--color-text-on-brand'));
+    expect(getComputedStyle(avatar).borderRadius).toBe('999px');
   }
 };

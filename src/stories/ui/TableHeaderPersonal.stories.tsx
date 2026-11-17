@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { TableHeaderPersonal } from '../generated/TableHeaderPersonal';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/TableHeaderPersonal',
@@ -45,6 +46,22 @@ export const Default: Story = {
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
-    expect(canvasElement.querySelectorAll('[role="columnheader"]')).toHaveLength(5);
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
+
+    const headers = canvasElement.querySelectorAll('[role="columnheader"]');
+    expect(headers).toHaveLength(5);
+
+    // The header strip is `bg/sunken` and its labels `text/secondary`; both move in
+    // the dark block, so a frozen light strip would wash out the whole table.
+    const row = canvasElement.querySelector('[role="row"]') as HTMLElement;
+    expect(getComputedStyle(row).backgroundColor).toBe(
+      tokenValue('--color-bg-sunken', 'background-color')
+    );
+    expect(getComputedStyle(row).backgroundColor).toBe(
+      tokenValue('--color-slate-950', 'background-color')
+    );
+    expect(getComputedStyle(headers[0]).color).toBe(tokenValue('--color-text-secondary'));
+    expect(getComputedStyle(headers[0]).color).toBe(tokenValue('--color-slate-400'));
+    expect(getComputedStyle(headers[0]).textTransform).toBe('uppercase');
   }
 };

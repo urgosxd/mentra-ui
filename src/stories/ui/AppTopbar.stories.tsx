@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { AppTopbar } from '../generated/AppTopbar';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/AppTopbar',
@@ -29,21 +30,11 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// Resolve a token through the browser so the guard works in both themes.
-function tokenColor(variable: string): string {
-  const probe = document.createElement('span');
-  probe.style.color = `var(${variable})`;
-  document.body.append(probe);
-  const value = getComputedStyle(probe).color;
-  probe.remove();
-  return value;
-}
-
 async function expectTitle(canvasElement: HTMLElement, copy: string) {
   const title = canvasElement.querySelector('header > span') as HTMLElement;
   expect(title.textContent).toBe(copy);
   expect(getComputedStyle(title).fontSize).toBe('14px');
-  expect(getComputedStyle(title).color).toBe(tokenColor('--color-text-primary'));
+  expect(getComputedStyle(title).color).toBe(tokenValue('--color-text-primary'));
 }
 
 export const Default: Story = {
@@ -81,7 +72,29 @@ export const Interactions: Story = {
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
-    await expectTitle(canvasElement, 'Indicadores · Ventas');
     expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
+
+    await expectTitle(canvasElement, 'Indicadores · Ventas');
+
+    // The bar surface and its hairline border both come from the dark block
+    // (slate-900 / slate-700); leaving them frozen would paint a light bar on a
+    // dark canvas.
+    const header = canvasElement.querySelector('header') as HTMLElement;
+    expect(getComputedStyle(header).backgroundColor).toBe(
+      tokenValue('--color-bg-surface', 'background-color')
+    );
+    expect(tokenValue('--color-bg-surface', 'background-color')).toBe(
+      tokenValue('--color-slate-900', 'background-color')
+    );
+    expect(getComputedStyle(header).borderBottomColor).toBe(
+      tokenValue('--color-border-subtle')
+    );
+
+    // The range trigger keeps its surface and takes the same dark border.
+    const trigger = canvasElement.querySelector('button') as HTMLElement;
+    expect(getComputedStyle(trigger).backgroundColor).toBe(
+      tokenValue('--color-bg-surface', 'background-color')
+    );
+    expect(getComputedStyle(trigger).color).toBe(tokenValue('--color-text-primary'));
   }
 };

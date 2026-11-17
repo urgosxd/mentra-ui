@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { SidebarSection } from '../generated/SidebarSection';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/SidebarSection',
@@ -83,9 +84,44 @@ export const SelectItem: Story = {
   }
 };
 
+export const AllStates: Story = {
+  render: () => (
+    <div className="flex w-60 flex-col gap-4 bg-(--color-bg-brand) p-4">
+      <SidebarSection label="Analíticas" items={['Indicadores', 'Reportes']} defaultOpen />
+      <SidebarSection label="Finanzas" items={['Flujo de Caja']} defaultOpen={false} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const headers = Array.from(canvasElement.querySelectorAll('button[aria-expanded]'));
+    expect(headers).toHaveLength(2);
+    expect(headers.map((header) => header.textContent)).toEqual(['Analíticas', 'Finanzas']);
+    expect(headers.map((header) => header.getAttribute('aria-expanded'))).toEqual([
+      'true',
+      'false'
+    ]);
+
+    // The collapsed group must not keep its list mounted.
+    expect(canvasElement.querySelectorAll('[data-open]')).toHaveLength(2);
+    const [open, closed] = Array.from(canvasElement.querySelectorAll('[data-open]'));
+    expect(open.querySelectorAll('li')).toHaveLength(2);
+    expect(closed.querySelector('ul')).toBeNull();
+  }
+};
+
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
-    expect(getHeader(canvasElement).getAttribute('aria-expanded')).toBe('true');
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
+
+    const header = getHeader(canvasElement);
+    expect(header.getAttribute('aria-expanded')).toBe('true');
+
+    // The header label is `text/on-brand` at the design's 0.62 opacity; the dark
+    // block moves the token to neutral-50, so both must be read from the theme.
+    const label = header.querySelector('span') as HTMLElement;
+    expect(getComputedStyle(label).color).toBe(tokenValue('--color-text-on-brand'));
+    expect(tokenValue('--color-text-on-brand')).toBe(tokenValue('--color-neutral-50'));
+    expect(getComputedStyle(label).opacity).toBe('0.62');
+    expect(getComputedStyle(label).textTransform).toBe('uppercase');
   }
 };

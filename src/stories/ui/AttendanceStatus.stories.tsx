@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { AttendanceStatus } from '../generated/AttendanceStatus';
 import { ATTENDANCE_STATES, type AttendanceState } from '../generated/app-data';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/AttendanceStatus',
@@ -84,6 +85,19 @@ export const AllStates: Story = {
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
     await expectStatus(canvasElement, 'Asistió');
+
+    // The pill pairs a feedback surface with its text token; the dark block moves
+    // both (green-50/green-950 and green-300), so the resolved values must follow.
+    const status = canvasElement.querySelector('[data-estado]') as HTMLElement;
+    expect(getComputedStyle(status).backgroundColor).toBe(
+      tokenValue('--color-feedback-success-bg', 'background-color')
+    );
+    expect(tokenValue('--color-feedback-success-bg', 'background-color')).toBe(
+      tokenValue('--color-green-950', 'background-color')
+    );
+    expect(getComputedStyle(status).color).toBe(tokenValue('--color-text-success'));
+    expect(getComputedStyle(status).color).toBe(tokenValue('--color-green-300'));
   }
 };

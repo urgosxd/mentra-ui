@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { AppSidebar } from '../generated/AppSidebar';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/AppSidebar',
@@ -79,6 +80,30 @@ export const SelectItem: Story = {
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
-    expect(getNav(canvasElement).querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
+
+    const nav = getNav(canvasElement);
+    expect(nav.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+
+    // The rail is `bg/brand` (brand-800 in light, slate-800 in dark) and its
+    // navigation uses `text/on-brand`; both must resolve from the dark block.
+    const aside = canvasElement.querySelector('aside') as HTMLElement;
+    expect(getComputedStyle(aside).backgroundColor).toBe(
+      tokenValue('--color-bg-brand', 'background-color')
+    );
+    expect(tokenValue('--color-bg-brand', 'background-color')).toBe(
+      tokenValue('--color-slate-800', 'background-color')
+    );
+
+    const wordmark = Array.from(aside.querySelectorAll('span')).find(
+      (span) => span.textContent === 'MENTRA'
+    ) as HTMLElement;
+    expect(getComputedStyle(wordmark).color).toBe(tokenValue('--color-text-on-brand'));
+
+    const current = nav.querySelector('[aria-current="page"]') as HTMLElement;
+    expect(getComputedStyle(current).backgroundColor).toBe(
+      tokenValue('--color-bg-brand-muted', 'background-color')
+    );
+    expect(getComputedStyle(current).opacity).toBe('1');
   }
 };

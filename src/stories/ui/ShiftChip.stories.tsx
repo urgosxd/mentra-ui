@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { ShiftChip } from '../generated/ShiftChip';
 import { SHIFT_TONES, type ShiftTone } from '../generated/app-data';
+import { tokenValue } from './styleProbe';
 
 const meta = {
   title: 'UI/ShiftChip',
@@ -105,6 +106,19 @@ export const AllTones: Story = {
 export const DarkTheme: Story = {
   parameters: { semantic: 'dark' },
   play: async ({ canvasElement }) => {
+    expect(document.documentElement.getAttribute('data-semantic')).toBe('dark');
     await expectChip(canvasElement, 'Mañana');
+
+    // The dark block redefines the morning pair (blue-100/blue-700 to
+    // blue-950/slate-200), so the chip must resolve both from the live theme.
+    const chip = canvasElement.querySelector('[data-turno]') as HTMLElement;
+    expect(getComputedStyle(chip).backgroundColor).toBe(
+      tokenValue('--color-shift-morning-bg', 'background-color')
+    );
+    expect(tokenValue('--color-shift-morning-bg', 'background-color')).toBe(
+      tokenValue('--color-blue-950', 'background-color')
+    );
+    expect(getComputedStyle(chip).color).toBe(tokenValue('--color-shift-morning-text'));
+    expect(getComputedStyle(chip).color).toBe(tokenValue('--color-slate-200'));
   }
 };

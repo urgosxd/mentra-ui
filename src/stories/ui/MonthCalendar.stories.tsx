@@ -71,8 +71,8 @@ export const Default: Story = {
     );
     expect(cells(canvasElement)[5].getAttribute('data-day')).toBe('1');
     expect(cells(canvasElement)[0].hasAttribute('data-day')).toBe(false);
-    expect(cells(canvasElement)[36].getAttribute('data-day')).toBe('31');
-    expect(cells(canvasElement)[37].hasAttribute('data-day')).toBe(false);
+    expect(cells(canvasElement)[35].getAttribute('data-day')).toBe('31');
+    expect(cells(canvasElement)[36].hasAttribute('data-day')).toBe(false);
 
     // Cell height and number styling come from the export.
     expect(getComputedStyle(cells(canvasElement)[0]).height).toBe('20px');

@@ -84,12 +84,17 @@ export const Focus: Story = {
     const field = getField(canvasElement);
     const shell = getShell(field);
 
-    expect(getComputedStyle(shell).outlineWidth).toBe('0px');
+    // An element with `outline-style: none` still reports a 3px `outline-width` in
+    // Chromium, so the width cannot say whether a ring is painted -- only the style
+    // can. At rest the pill carries no ring, just its hairline border.
+    expect(getComputedStyle(shell).outlineStyle).toBe('none');
 
     await userEvent.click(field);
     expect(document.activeElement).toBe(field);
 
     const focused = getComputedStyle(shell);
+    // The ring is real: a painted style, the designed width and the focus token.
+    expect(focused.outlineStyle).toBe('solid');
     expect(focused.outlineWidth).toBe('2px');
     expect(focused.outlineColor).toBe(tokenValue('--color-border-focus'));
     expect(focused.borderTopWidth).toBe('1px');

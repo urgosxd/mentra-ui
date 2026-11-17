@@ -165,12 +165,17 @@ export const Focus: Story = {
   play: async ({ canvasElement, userEvent }) => {
     const buttons = getButtons(getNav(canvasElement));
 
-    expect(getComputedStyle(buttons[0]).outlineWidth).toBe('0px');
+    // An element with `outline-style: none` still reports a 3px `outline-width` in
+    // Chromium, so the rest state is "no ring painted", which only the style can
+    // show. Every cell shares the same ring, so the first button stands for all.
+    expect(getComputedStyle(buttons[0]).outlineStyle).toBe('none');
 
     await userEvent.tab();
     expect(document.activeElement).toBe(buttons[0]);
 
     const focused = getComputedStyle(buttons[0]);
+    // The ring is real: a painted style, the designed width and the focus token.
+    expect(focused.outlineStyle).toBe('solid');
     expect(focused.outlineWidth).toBe('2px');
     expect(focused.outlineColor).toBe(tokenValue('--color-border-focus'));
   }

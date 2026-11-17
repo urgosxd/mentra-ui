@@ -63,12 +63,17 @@ export const Click: Story = {
 export const Focus: Story = {
   play: async ({ canvasElement, userEvent }) => {
     const chip = getChip(canvasElement);
-    expect(getComputedStyle(chip).outlineWidth).toBe('0px');
+    // An element with `outline-style: none` still reports a 3px `outline-width` in
+    // Chromium, so the width cannot say whether a ring is painted -- only the style
+    // can. At rest the chip must carry no ring at all.
+    expect(getComputedStyle(chip).outlineStyle).toBe('none');
 
     await userEvent.tab();
     expect(document.activeElement).toBe(chip);
 
     const focused = getComputedStyle(chip);
+    // The ring is real: a painted style, the designed width and the focus token.
+    expect(focused.outlineStyle).toBe('solid');
     expect(focused.outlineWidth).toBe('2px');
     expect(focused.outlineColor).toBe(tokenValue('--color-border-focus'));
   }

@@ -6,7 +6,6 @@ import { AiFab } from "../stories/generated/AiFab";
 import { AppSidebar } from "../stories/generated/AppSidebar";
 import { AppTopbar } from "../stories/generated/AppTopbar";
 import { MENTRA_SECTIONS, type SidebarSectionData } from "../stories/generated/app-data";
-import { useShellNavigate } from "./navigation";
 
 export type DashboardLayoutProps = {
   /** Module title in the topbar, e.g. `Indicadores · Ventas`. */
@@ -41,14 +40,12 @@ export function DashboardLayout({
   aiLabel,
   children,
 }: DashboardLayoutProps) {
-  const shellNavigate = useShellNavigate();
-
   return (
     <div
       data-dashboard-layout=""
       className="relative flex h-full w-full overflow-hidden rounded-(--radius-surface) bg-(--color-bg-canvas) outline-1 -outline-offset-1 outline-(--color-border-subtle)"
     >
-      <AppSidebar sections={sections} activeItem={activeNavItem} onSelect={onNavSelect ?? shellNavigate} />
+      <AppSidebar sections={sections} activeItem={activeNavItem} onSelect={onNavSelect} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <AppTopbar

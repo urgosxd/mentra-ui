@@ -35,6 +35,8 @@ import {
 export type AsistenciaProps = {
   /** Screen data; defaults to the design fixtures. */
   data?: AsistenciaData;
+  /** Sidebar handler forwarded from an outer shell; absent when the screen is rendered alone. */
+  onNavSelect?: (item: string) => void;
 };
 
 /** Height of the daily chart track the export stacks its segments inside. */
@@ -186,7 +188,7 @@ function MarkingRow({ row }: { row: Marking }) {
 }
 
 /** Asistencia screen of the RRHH module: register table, day detail and summaries. */
-export function Asistencia({ data = asistencia }: AsistenciaProps) {
+export function Asistencia({ data = asistencia, onNavSelect }: AsistenciaProps) {
   const { register, detail, daily, punctuality, incidents } = data;
 
   return (
@@ -196,6 +198,7 @@ export function Asistencia({ data = asistencia }: AsistenciaProps) {
       userName={data.chrome.userName}
       initials={data.chrome.initials}
       activeNavItem={data.chrome.activeNavItem}
+      onNavSelect={onNavSelect}
     >
       {/* `w-full!` drops the 1240px card width of the generated header; the breadcrumb
           line box is pinned to the export's 13px so the block closes at 61px. */}

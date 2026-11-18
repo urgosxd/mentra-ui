@@ -135,8 +135,9 @@ export const Default: Story = {
   }
 };
 
-export const StandaloneNoProvider: Story = {
-  // Pins the no-provider fallback of `DashboardLayout`: outside a shell the rail stays inert.
+export const StandaloneInertRail: Story = {
+  // Pins the standalone screen: rendered outside the shell it gets no sidebar handler,
+  // so the rail stays inert and only its own fixture item is `aria-current="page"`.
   play: async ({ canvasElement }) => {
     const content = screen(canvasElement);
     const user = userEvent.setup();

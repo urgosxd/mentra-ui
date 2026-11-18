@@ -115,5 +115,16 @@ export const Navigation: Story = {
     expect(shell(canvasElement).getAttribute('data-app-shell')).toBe('horarios');
     expect(content.textContent).toContain('RRHH / Horarios');
     expectSingleChrome(content);
+
+    // Return leg: the rail goes back to the frame the shell opened on.
+    await user.click(within(content).getByRole('button', { name: 'Indicadores' }));
+    expect(shell(canvasElement).getAttribute('data-app-shell')).toBe('indicadores');
+    expect(content.textContent).toContain('Indicadores · Ventas');
+    expect(content.textContent).toContain('Evolución de ventas');
+    // The frame it left behind is gone, chrome included.
+    expect(content.textContent).not.toContain('RRHH / Horarios');
+    expect(within(content).getByRole('button', { name: 'Indicadores' }).getAttribute('aria-current')).toBe('page');
+    expect(within(content).getByRole('button', { name: 'Horarios' }).getAttribute('aria-current')).toBeNull();
+    expectSingleChrome(content);
   }
 };

@@ -29,6 +29,8 @@ import {
 export type PersonalProps = {
   /** Screen data; defaults to the design fixtures. */
   data?: PersonalData;
+  /** Sidebar handler forwarded from an outer shell; absent when the screen is rendered alone. */
+  onNavSelect?: (item: string) => void;
 };
 
 /** Ring geometry of the export: 68px box, inner radius 0.76 → 8.16px stroke. */
@@ -329,7 +331,7 @@ function StaffDetailBody({ panel }: { panel: StaffDetailPanel }) {
 }
 
 /** Personal screen of the RRHH module: header actions, KPI row, staff list and detail. */
-export function Personal({ data = personal }: PersonalProps) {
+export function Personal({ data = personal, onNavSelect }: PersonalProps) {
   return (
     <DashboardLayout
       title={data.chrome.title}
@@ -337,6 +339,7 @@ export function Personal({ data = personal }: PersonalProps) {
       userName={data.chrome.userName}
       initials={data.chrome.initials}
       activeNavItem={data.chrome.activeNavItem}
+      onNavSelect={onNavSelect}
     >
       {/* `w-full!` drops the 1240px card width of the generated header; the breadcrumb
           line box is pinned to the export's 13px so the block closes at 44px. */}

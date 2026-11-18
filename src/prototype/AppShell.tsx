@@ -3,7 +3,6 @@
 // router, no state and no persistence: `current` is a prop, `onNavigate` only
 // requests a change, and each screen keeps rendering from its own fixtures.
 import { useCallback, type ComponentType } from "react";
-import { NavigationProvider } from "./NavigationProvider";
 import { Asistencia } from "./screens/Asistencia";
 import { Horarios } from "./screens/Horarios";
 import { IndicadoresVentas } from "./screens/IndicadoresVentas";
@@ -21,7 +20,7 @@ const SCREEN_LABEL: Record<ScreenId, string> = {
 };
 
 /** Every screen is a plain component that brings its own fixtures and its own chrome. */
-const SCREEN_COMPONENT: Record<ScreenId, ComponentType> = {
+const SCREEN_COMPONENT: Record<ScreenId, ComponentType<{ onNavSelect?: (item: string) => void }>> = {
   indicadores: IndicadoresVentas,
   personal: Personal,
   horarios: Horarios,
@@ -44,7 +43,8 @@ export function AppShell({ current, onNavigate }: AppShellProps) {
   const Screen = SCREEN_COMPONENT[current];
 
   // The screen's own `DashboardLayout` draws the single chrome of the frame; the
-  // shell only hands it the navigation it should forward to the sidebar.
+  // shell hands it the sidebar handler as an explicit prop, translated from the
+  // rail label to the screen it opens. Items without a frame stay a no-op.
   const navigate = useCallback(
     (item: string) => {
       const target = SCREEN_OF_LABEL[item];
@@ -55,9 +55,7 @@ export function AppShell({ current, onNavigate }: AppShellProps) {
 
   return (
     <div data-app-shell={current} className="h-full w-full">
-      <NavigationProvider onNavigate={navigate}>
-        <Screen />
-      </NavigationProvider>
+      <Screen onNavSelect={navigate} />
     </div>
   );
 }

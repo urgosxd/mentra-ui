@@ -15,6 +15,8 @@ import { PanelSurface } from "../PanelSurface";
 export type IndicadoresVentasProps = {
   /** Screen data; defaults to the design fixtures. */
   data?: IndicadoresVentasData;
+  /** Sidebar handler forwarded from an outer shell; absent when the screen is rendered alone. */
+  onNavSelect?: (item: string) => void;
 };
 
 const CATEGORY_DOT: Record<CategoriesPanel["rows"][number]["tone"], string> = {
@@ -109,7 +111,7 @@ function CategoriesPanelBody({ panel }: { panel: CategoriesPanel }) {
 }
 
 /** Ventas screen of the indicators module: tabs, KPI row and the six indicator panels. */
-export function IndicadoresVentas({ data = indicadoresVentas }: IndicadoresVentasProps) {
+export function IndicadoresVentas({ data = indicadoresVentas, onNavSelect }: IndicadoresVentasProps) {
   return (
     <DashboardLayout
       title={data.chrome.title}
@@ -117,6 +119,7 @@ export function IndicadoresVentas({ data = indicadoresVentas }: IndicadoresVenta
       userName={data.chrome.userName}
       initials={data.chrome.initials}
       activeNavItem={data.chrome.activeNavItem}
+      onNavSelect={onNavSelect}
     >
       <div
         role="tablist"

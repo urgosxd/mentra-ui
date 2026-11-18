@@ -16,6 +16,25 @@ pnpm run storybook     # start Storybook on port 6006
 pnpm run build-storybook
 ```
 
+## Production build
+
+Production is deployed on Vercel, driven by `vercel.json`. There is no `Dockerfile` and no CI workflow in this repo: Vercel reads the `installCommand` and `buildCommand` from that file.
+
+The exact production sequence:
+
+```bash
+# 1. pnpm at the pinned version (packageManager in package.json, currently pnpm 10.34.9)
+pnpm install --frozen-lockfile   # works with CI=true
+# 2. the build Vercel runs
+pnpm run build-storybook
+```
+
+Dev dependencies are REQUIRED at build time. Storybook and Vite are devDependencies, so the install must not use `--omit=dev` or `--prod`; doing so removes the tools the build needs.
+
+The deployed artifact is `storybook-static/`, and `vercel.json` sets it as the output directory with `/mcp` rewritten to the `api/mcp` function. `pnpm run build` produces the Vite app in `dist/`; that is the app build and is NOT what production serves, so do not point the output directory at it.
+
+`npm ci` no longer applies: `package-lock.json` was removed by the pnpm migration, so running it now aborts with `EUSAGE` instead of installing.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

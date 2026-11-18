@@ -143,10 +143,10 @@ export type PersonalData = {
 };
 
 export const personal: PersonalData = {
-  // The canvas still carries the topbar title of the Horarios screen on this
-  // frame; transcribed as designed so the prototype matches the export.
+  // The canvas of frame 367078803:5257 carries the topbar title of the Horarios
+  // screen (node 0:504), left over from a copy/paste; the screen is Personal.
   chrome: {
-    title: "Horarios · Planificación semanal",
+    title: "Personal",
     rangeLabel: "1 – 31 Mar 2025",
     userName: "Gerencia",
     initials: "LC",

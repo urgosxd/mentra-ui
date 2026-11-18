@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { personal } from '../../prototype/fixtures/personal';
 import { Personal } from '../../prototype/screens/Personal';
 
@@ -21,8 +21,6 @@ type Story = StoryObj<typeof meta>;
 
 /** Copy the design draws in frame 367078803:5257, verbatim, region by region. */
 const DESIGN_TEXTS = [
-  // Topbar chrome (the canvas still carries the Horarios title on this frame)
-  'Horarios · Planificación semanal',
   '1 – 31 Mar 2025',
   'Gerencia',
   // Page header + actions
@@ -72,6 +70,8 @@ const DESIGN_TEXTS = [
   'Editar ficha',
   'Enviar mensaje',
 ];
+// The topbar title deliberately departs from canvas node 0:504, which carries
+// `Horarios · Planificación semanal` on frame 367078803:5257 (a copy/paste leftover); 01, 03 and 04 name their own module.
 
 function screen(canvasElement: HTMLElement): HTMLElement {
   const root = canvasElement.firstElementChild;
@@ -132,5 +132,17 @@ export const Default: Story = {
     // The chrome is drawn once by the shared layout.
     expect(content.querySelectorAll('aside')).toHaveLength(1);
     expect(content.querySelectorAll('button[aria-label="Asistente IA"]')).toHaveLength(1);
+  }
+};
+
+export const StandaloneNoProvider: Story = {
+  // Pins the no-provider fallback of `DashboardLayout`: outside a shell the rail stays inert.
+  play: async ({ canvasElement }) => {
+    const content = screen(canvasElement);
+    const user = userEvent.setup();
+    await user.click(within(content).getByRole('button', { name: 'Horarios' }));
+    expect(content.textContent).toContain('RRHH / Personal');
+    expect(within(content).getByRole('button', { name: 'Personal' }).getAttribute('aria-current')).toBe('page');
+    expect(within(content).getByRole('button', { name: 'Horarios' }).getAttribute('aria-current')).toBeNull();
   }
 };

@@ -53,7 +53,10 @@ function screen(canvasElement: HTMLElement): HTMLElement {
 }
 
 export const Default: Story = {
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, parameters }) => {
+    // Layout guard: `sb-main-fullscreen` is unreachable in this runner, so assert the resolved parameter.
+    expect(parameters.layout).toBe('fullscreen');
+
     const content = screen(canvasElement);
 
     for (const text of DESIGN_TEXTS) {
@@ -71,7 +74,10 @@ export const Default: Story = {
 // The chrome is drawn once by the shared layout: a screen that copies it would ship
 // a second rail, topbar or FAB into the same 1440x1180 frame.
 export const ChromeSingleton: Story = {
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, parameters }) => {
+    // Layout guard: `sb-main-fullscreen` is unreachable in this runner, so assert the resolved parameter.
+    expect(parameters.layout).toBe('fullscreen');
+
     const content = screen(canvasElement);
     expect(content.getBoundingClientRect().width).toBe(1440);
     expect(content.getBoundingClientRect().height).toBe(1180);
